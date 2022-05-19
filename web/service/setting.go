@@ -33,6 +33,10 @@ var defaultValueMap = map[string]string{
 	"tgBotToken":         "",
 	"tgBotChatId":        "0",
 	"tgRunTime":          "",
+	"barkEnable":         "false",
+	"barkUrl":            "",
+	"barkToken":          "",
+	"barkRunTime":        "",
 }
 
 type SettingService struct {
@@ -300,4 +304,40 @@ func (s *SettingService) UpdateAllSetting(allSetting *entity.AllSetting) error {
 		}
 	}
 	return common.Combine(errs...)
+}
+
+
+//bark推送
+func (s *SettingService) SetBarkEnabled(value bool) error {
+	return s.setBool("barkEnable", value)
+}
+
+func (s *SettingService) GetBarkEnabled() (bool, error) {
+	return s.getBool("barkEnable")
+}
+
+func (s *SettingService) SetBarkUrl(url string) error {
+	return s.setString("barkUrl", url)
+}
+
+func (s *SettingService) GetBarkUrl() (string, error) {
+	return s.getString("barkUrl")
+}
+
+
+func (s *SettingService) SetBarkToken(token string) error {
+	return s.setString("barkToken", token)
+}
+
+func (s *SettingService) GetBarkToken() (string, error) {
+	return s.getString("barkToken")
+}
+
+
+func (s *SettingService) SetBarkRuntime(time string) error {
+	return s.setString("barkRunTime", time)
+}
+
+func (s *SettingService) GetBarkRuntime() (string, error) {
+	return s.getString("barkRunTime")
 }

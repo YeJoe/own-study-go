@@ -168,6 +168,11 @@ class AllSetting {
         this.tgBotChatId = 0;
         this.tgRunTime = "";
         this.xrayTemplateConfig = "";
+        //bark推送
+        this.barkEnable = false;
+        this.barkUrl = "";
+        this.barkToken = "";
+        this.barkRunTime = "";
 
         this.timeLocation = "Asia/Shanghai";
 

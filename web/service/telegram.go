@@ -4,6 +4,10 @@ import (
 	"fmt"
 	"log"
 	"net"
+	// "io/ioutil"
+	// "net/http"
+	// "bytes"
+	// "encoding/json"
 	"os"
 	"runtime"
 	"strconv"
@@ -102,10 +106,12 @@ func (s *TelegramService) StartRun() {
 		return
 	}
 	logger.Infof("TelegramService GetTgBotToken:%s", tgBottoken)
+
 	botInstace, err = tgbotapi.NewBotAPI(tgBottoken)
 	if err != nil {
 		logger.Infof("telegram service start run failed,NewBotAPI fail:%v,tgBottoken:%s", err, tgBottoken)
 	}
+
 	botInstace.Debug = false
 	fmt.Printf("Authorized on account %s", botInstace.Self.UserName)
 	//get all my commands
@@ -255,3 +261,4 @@ func (s *TelegramService) StopRunAndClose() {
 		botInstace.StopReceivingUpdates()
 	}
 }
+

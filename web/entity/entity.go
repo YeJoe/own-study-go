@@ -37,6 +37,12 @@ type AllSetting struct {
 	TgBotChatId        int    `json:"tgBotChatId" form:"tgBotChatId"`
 	TgRunTime          string `json:"tgRunTime" form:"tgRunTime"`
 	XrayTemplateConfig string `json:"xrayTemplateConfig" form:"xrayTemplateConfig"`
+	//bark推送
+	BarkEnable         bool   `json:"barkEnable" form:"barkEnable"`
+	BarkToken          string `json:"barkToken" form:"barkToken"`
+	BarkUrl        	   string `json:"barkUrl" form:"barkUrl"`
+	BarkRunTime        string `json:"barkRunTime" form:"barkRunTime"`
+
 
 	TimeLocation string `json:"timeLocation" form:"timeLocation"`
 }

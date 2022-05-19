@@ -27,6 +27,7 @@ type StatsNotifyJob struct {
 	xrayService     service.XrayService
 	inboundService  service.InboundService
 	settingService  service.SettingService
+	barkService service.BarkService  //bark推送
 }
 
 func NewStatsNotifyJob() *StatsNotifyJob {
@@ -41,6 +42,8 @@ func (j *StatsNotifyJob) Run() {
 	var info string
 	info = j.GetsystemStatus()
 	j.telegramService.SendMsgToTgbot(info)
+	j.barkService.BarkPush(info)  //bark推送
+
 }
 
 func (j *StatsNotifyJob) UserLoginNotify(username string, ip string, time string, status LoginStatus) {
@@ -64,6 +67,7 @@ func (j *StatsNotifyJob) UserLoginNotify(username string, ip string, time string
 	msg += fmt.Sprintf("用户:%s\r\n", username)
 	msg += fmt.Sprintf("IP:%s\r\n", ip)
 	j.telegramService.SendMsgToTgbot(msg)
+	j.barkService.BarkPush(msg)  //bark推送
 }
 
 func (j *StatsNotifyJob) SSHStatusLoginNotify(xuiStartTime string) {
@@ -127,6 +131,8 @@ func (j *StatsNotifyJob) SSHStatusLoginNotify(xuiStartTime string) {
 		SSHLoginInfo += fmt.Sprintf("SSH登录IP:%s", SSHLoginIpAddr)
 		SSHLoginInfo += fmt.Sprintf("当前SSH登录用户数:%s", getSSHUserNumber)
 		j.telegramService.SendMsgToTgbot(SSHLoginInfo)
+		j.barkService.BarkPush(SSHLoginInfo)  //bark推送
+
 	} else {
 		SSHLoginUser = numberInt
 	}

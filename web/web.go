@@ -95,6 +95,8 @@ type Server struct {
 	settingService  service.SettingService
 	inboundService  service.InboundService
 	telegramService service.TelegramService
+	barkService 	service.BarkService  //bark推送
+
 
 	cron *cron.Cron
 
@@ -391,8 +393,16 @@ func (s *Server) Start() (err error) {
 	//run telegram service
 	go func() {
 		s.telegramService.StartRun()
+	
 		time.Sleep(time.Second * 2)
 	}()
+	//bark推送
+	go func() {
+		s.barkService.BarkStartRun()
+		
+		time.Sleep(time.Second * 2)
+	}()
+
 
 	s.httpServer = &http.Server{
 		Handler: engine,
@@ -402,12 +412,14 @@ func (s *Server) Start() (err error) {
 		s.httpServer.Serve(listener)
 	}()
 
+
 	return nil
 }
 
 func (s *Server) Stop() error {
 	s.cancel()
 	s.telegramService.StopRunAndClose()
+
 	s.xrayService.StopXray()
 	if s.cron != nil {
 		s.cron.Stop()
