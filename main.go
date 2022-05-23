@@ -229,6 +229,11 @@ func main() {
 	var tgbotRuntime string
 	var reset bool
 	var show bool
+	//bark推送
+	var barkToken string
+	var barkUrl string
+	var barkRunTime string
+	//bark End
 	settingCmd.BoolVar(&reset, "reset", false, "reset all settings")
 	settingCmd.BoolVar(&show, "show", false, "show current settings")
 	settingCmd.IntVar(&port, "port", 0, "set panel port")
@@ -290,6 +295,10 @@ func main() {
 		if (tgbottoken != "") || (tgbotchatid != 0) || (tgbotRuntime != "") {
 			updateTgbotSetting(tgbottoken, tgbotchatid, tgbotRuntime)
 		}
+		//bark推送
+		if (barkUrl != "") || (barkToken != "") || (barkRunTime != "") {
+			updateBarkSetting(barkUrl, barkToken,  barkRunTime)
+		}
 	default:
 		fmt.Println("except 'run' or 'v2-ui' or 'setting' subcommands")
 		fmt.Println()
@@ -299,4 +308,67 @@ func main() {
 		fmt.Println()
 		settingCmd.Usage()
 	}
+}
+
+//bark推送
+func updateBarkEnableSts(status bool) {
+	settingService := service.SettingService{}
+	currentBarkSts, err := settingService.GetBarkEnabled()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	logger.Infof("current enableBark status[%v],need update to status[%v]", currentBarkSts, status)
+	if currentBarkSts != status {
+		err := settingService.SetBarkEnabled(status)
+		if err != nil {
+			fmt.Println(err)
+			return
+		} else {
+			logger.Infof("SetBarkEnabled[%v] success", status)
+		}
+	}
+	return
+}
+
+func updateBarkSetting(barkUrl string, barkToken string, barkRunTime string) {
+	err := database.InitDB(config.GetDBPath())
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	settingService := service.SettingService{}
+
+	if barkUrl != ""  {
+		err := settingService.SetBarkUrl(barkUrl)
+		if err != nil {
+			fmt.Println(err)
+			return
+		} else {
+			logger.Info("updateBarkSetting barkUrl success")
+		}
+	}
+
+	if barkToken != "" {
+		err := settingService.SetBarkToken(barkToken)
+		if err != nil {
+			fmt.Println(err)
+			return
+		} else {
+			logger.Info("updateBarkSetting barkToken success")
+		}
+	}
+
+	if barkRunTime != "" {
+		err := settingService.SetBarkRuntime(barkRunTime)
+		if err != nil {
+			fmt.Println(err)
+			return
+		} else {
+			logger.Infof("updateBarkSetting barkRunTime[%s] success", barkRunTime)
+		}
+	}
+
+
 }
